@@ -1,0 +1,302 @@
+---
+title: 'PNAD Covid: Uma análise referente aos atendimentos público e privado'
+author: "Elton Santos"
+date: "`r Sys.Date()`"
+output: 
+  html_document: default
+  pdf_document:
+    toc: false
+    number_section: false
+    latex_engine: xelatex
+---
+
+# Introdução
+
+## Objetivo
+
+A pandemia de COVID-19 evidenciou desigualdades estruturais no acesso aos serviços de saúde no Brasil. Embora o vírus tenha atingido todas as camadas sociais, seus impactos foram distribuídos de forma heterogênea, refletindo diferenças socioeconômicas históricas e regionais.
+
+Neste contexto, torna-se relevante analisar como se comportaram os padrões de internação hospitalar nas redes pública e privada durante o período mais crítico da pandemia. Considerando que o Sistema Único de Saúde (SUS) é responsável pela maior parte da assistência hospitalar no país, enquanto o setor privado concentra maior cobertura entre indivíduos de renda mais elevada, a comparação entre esses dois sistemas permite avaliar possíveis assimetrias no perfil dos pacientes e na gravidade dos casos atendidos.
+
+Este estudo tem como objetivo analisar as taxas de internação associadas à COVID-19 nas redes pública e privada, além de investigar como essas diferenças se relacionam com variáveis como sexo, renda, faixa etária e região geográfica.
+
+## Base de dados
+
+As bases de dados utilizadas neste projeto, são as bases de dados PNAD COVID. Esses dados foram coletados de Maio até Novembro de 2020 monitorando os impactos da pandemia da Covid-19 em todo territótrio nacional. São 7 bases de dados, uma para cada mês em que a pesquisa ocorrreu. Todas as bases foram unificadas em uma base única e depois, tratadas. Caso queiram replicar meus resultados, a base de dados pode ser baixada a partir do seguinte link: [Download bases PNAD COVID](https://www.ibge.gov.br/estatisticas/investigacoes-experimentais/estatisticas-experimentais/27946-divulgacao-semanal-pnadcovid1.html?=&t=downloads). Caso tenha algum problema para baixa-las, me avise que posso enviar para você.
+
+# Metodologia
+
+### Variáveis utilizadas
+
+Abaixo, segue uma tabela onde é informado o código das variáveis escolhidas, sua descrição e como foram renomeadas:
+
+| Código da variável | Descrição | Renomeado |
+|:----------------------:|:----------------------:|:----------------------:|
+| A001 | Número de ordem | **n_ordem** |
+| A002 | Idade do morador | **idade** |
+| A003 | Sexo | **sexo** |
+| B0041 | Local que buscou atendimento foi posto de saúde/Unidade básica de saúde /Equipe de Saúde da Família (médico, enfermeiro, técnico de enfermagem ou agente comunitário de saúde) | **atend_publico** |
+| B0042 | Local que buscou atendimento foi pronto socorro do SUS/UPA | **ps_sus** |
+| B0043 | Local que buscou atendimento foi hospital do SUS | **hosp_sus** |
+| B0044 | Local que buscou atendimento foi ambulatório ou consultório privado ou ligado às forças armadas | **atend_privado** |
+| B0045 | Local que buscou atendimento foi pronto socorro privado ou ligado às forças armadas | **ps_privado** |
+| B0046 | Local que buscou atendimento foi hospital privado ou ligado às forças armadas | **hosp_privado** |
+| B005 | Ao procurar o hospital, teve que ficar internado por um dia ou mais | **internacao** |
+| C011A12 | Valor em dinheiro | **renda** |
+| V1013 | Mês da pesquisa | **mes_pesquisa** |
+| UF | Unidade da Federação | **estado** |
+
+# Organizando o ambiente:
+
+## Instalando os pacotes utilizados durante a análise:
+
+```{r}
+pacman::p_load(tidyverse,
+               lubridate,
+               ggplot2,
+               viridis,
+               RColorBrewer,
+               patchwork,
+               scales,
+               geobr)
+```
+
+## Selecionando as paletas de cores
+
+```{r}
+cores <- brewer.pal(9, "Paired")
+minhas_cores <- cores[c(2, 4)]
+sexo_cores <- cores[c(1,5)]
+```
+
+# Resultados visuais e analise dos achados
+
+## 1) Media de idade pelo tipo de atendimento
+
+```{r}
+ggplot(pnad_sociodem, aes(x = atendimento_tipo, y = idade_media, fill = atendimento_tipo))+
+  geom_col(width = 0.7)+
+  geom_text(aes(label = idade_media), vjust = -0.3,size = 4)+
+  scale_fill_manual(values = minhas_cores)+
+  labs(title = "Média de idade dos pacientes pelo tipo de atendimento",
+       x = "Tipo de atendimento",
+       y = "Idade média",
+       fill = "Tipo de atendimento")+
+  theme_classic(base_size = 13)
+```
+
+O atendimento na rede privada apresentou média de idade ligeiramente superior (42 anos) em comparação à rede pública (40 anos). Apesar dessa diferença, os valores próximos indicam que ambos os tipos de atenderam pacientes com perfis etários semelhantes em ambos os tipos de atendimento.
+
+Esta pequena diferença observada sugere uma maior participação de adultos de meia-idade tanto na rede privada quanto na rede pública. Esse padrão é consistente com o perfil dos beneficiários de planos de saúde, que inclui uma proporção relevante de indivíduos com maior prevalência de comorbidades crônicas.
+
+## 2) Renda média por tipo de atendimento:
+
+```{r}
+ggplot(pnad_sociodem,aes(x = atendimento_tipo, y = renda_media, fill = atendimento_tipo))+
+  geom_col(width = 0.7)+
+  geom_text(aes(label = paste0("R$ ",round(renda_media,0))), vjust= -0.3, size = 4)+
+  scale_fill_manual(values = minhas_cores)+
+  labs(title = "Renda média por tipo de atendimento",
+       x = "Tipo de atendimento",
+       y = "Renda média",
+       fill = "Tipo de atendimento")+
+  theme_classic(base_size = 13)
+```
+
+Observa-se uma diferença expressiva de renda entre os pacientes atendidos nas redes pública e privada. Indivíduos que utilizaram serviços privados apresentam renda média aproximadamente duas vezes superior à daqueles atendidos na rede pública.
+
+Este resultado reflete a desigualdade socioeconômica estrutural do Brasil, nas quais o acesso ao sistema privado de saúde está fortemente associado ao nível de renda. Esta grande diferença evidencia que a escolha ou possibilidade de atendimento não ocorre de forma aleatória, mas está fortemente condicionada a fatores econômicos.
+
+Esse achado é central para a interpretação das análises subsequentes, pois indica que desigualdades de renda influencia diretamente o padrão de acesso aos serviços de saúde e os perfis de internação observados durante a pandemia de COVID-19.
+
+## 3) Distribuição do sexo pelos tipos de atendimento
+
+```{r}
+ggplot(pnad_sexo, aes(x = "", y = proporcao, fill = sexo)) +
+  geom_col(width = 2) +
+  coord_polar("y") +
+  facet_wrap(~ atendimento_tipo) +
+  scale_fill_manual(values = sexo_cores) +
+  geom_text(aes(label = percent(proporcao, accuracy = 1)),
+            position = position_stack(vjust = 0.5),
+            size = 7) +
+  labs(title = "Distribuição por sexo dentro de cada tipo de atendimento",
+       fill = "Sexo") +
+  theme_void(base_size = 13) +
+  theme(
+    legend.text = element_text(size = 14),      
+    legend.title = element_text(size = 16),     
+    plot.title = element_text(size = 16, face = "bold"),
+    strip.text = element_text(size = 16, face = "bold"))
+```
+
+As mulheres representam a maioria das internações relacionadas à COVID-19 em ambos os tipos de atendimento, correspondendo a aproximadamente 57% no setor privado e 59% na rede pública. A distribuição por sexo é bastante semelhante entre os dois sistemas, indicando que o sexo não atua como um fator diferencial de relevancia no padrão do tipo de uso do atendimento hospitalar.
+
+A leve predominância feminina pode estar associada a características demográficas da população brasileira, como maior longevidade das mulheres, além de comportamentos relacionados à saúde, incluindo maior propensão à busca por atendimento.
+
+De modo geral, a amostra apresenta uma distribuição relativamente semelhante entre os tipos de atendimento.
+
+## 4) Diferença nas internações entre as redes públicas privadas
+
+```{r}
+ggplot(internacoes_pubpriv, aes(x = atendimento_tipo, y = taxa_internacoes, fill = atendimento_tipo))+
+  geom_col()+
+  geom_text(aes(label = paste0(taxa_internacoes, "% (n = ",quantidade, ")")),
+            vjust = -0.5,
+            size = 3.5)+
+  scale_fill_manual(values = minhas_cores)+
+  labs(title = "Taxa de internações por atendimento publico x privado",
+       x = "Tipo de atendimento",
+       y = "Taxa (%)",
+       fill = "Tipo de atendimento")+
+  theme_classic(base_size = 13)
+```
+
+A taxa de internação observada na rede pública (11,1%) é levemente superior à registrada no setor privado (8,9%), evidenciando um padrão consistente ao longo da análise. Apesar de atender uma população com menor cobertura de planos de saúde, o Sistema Único de Saúde (SUS) concentrou proporcionalmente mais internações durante a pandemia.
+
+Esse resultado reflete, em grande parte, o perfil socioeconômico e clínico da população atendida pelo SUS, caracterizada por maior vulnerabilidade social, maior carga de comorbidades e, em muitos casos, maior exposição ao vírus. Além disso, o sistema público é historicamente responsável pela maior parte das internações hospitalares no país.
+
+A maior taxa de internação na rede pública evidencia o impacto desproporcional da pandemia sobre populações mais vulneráveis e reforça o papel central do SUS na resposta à COVID-19, especialmente no atendimento dos casos mais graves.
+
+## 5) Taxa de Internações por mes
+
+```{r}
+# Grafico com a taxa de internação:
+tx_int <- ggplot(internacoes_pubpriv_mes, aes(x = mes_pesquisa, y = taxa_internacoes, color = atendimento_tipo, group = atendimento_tipo))+
+  geom_line(size = 1.2)+
+  geom_point(size = 3)+
+  geom_text(aes(label = paste0(taxa_internacoes, "%")),
+            #vjust = -0.5,
+            nudge_y = 0.3,
+            size = 3.5,
+            color = "gray0",
+            fontface = "bold")+
+  scale_color_manual(values = minhas_cores)+
+  labs(title = "Taxa de internações por mês na rede pública e privada",
+       x = "Mês",
+       y = "Taxa (%)",
+       color = "Tipo de atendimento")+
+  theme_classic(base_size = 10)+
+  theme(plot.title = element_text(face = "bold")); tx_int
+
+# Grafico
+qtd_int <- ggplot(internacoes_pubpriv_mes, aes(x = mes_pesquisa, y = quantidade, color = atendimento_tipo, group = atendimento_tipo))+
+  geom_line(size = 1.2)+
+  geom_point(size = 3)+
+  geom_text(aes(label = quantidade),
+            #vjust = -0.5,
+            nudge_y = 0.3,
+            size = 3.5,
+            color = "gray0",
+            fontface = "bold")+
+  scale_color_manual(values = minhas_cores)+
+  labs(title = "Quantidade de internações por mês na rede pública e privada",
+       x = "Mês",
+       y = "Quantidade",
+       color = "Tipo de atendimento")+
+  theme_classic(base_size = 10)+
+  theme(plot.title = element_text(face = "bold")); qtd_int
+
+internacoes_mes_linha <- tx_int / qtd_int
+internacoes_mes_linha
+```
+
+Ao longo de todo o período analisado, a rede pública apresentou volume de internações substancialmente superior ao da rede privada em todos os meses, além de taxas de internação consistentemente mais elevadas. Esse padrão sugere maior demanda por serviços hospitalares no SUS, possivelmente associada à maior gravidade dos casos, maior vulnerabilidade da população atendida e menor acesso prévio a cuidados de saúde.
+
+Em ambos os setores, observa-se um pico na taxa de internações no mês de junho, seguido por uma tendência geral de queda ao longo dos meses subsequentes. Esse comportamento acompanha a evolução epidemiológica da COVID-19 em 2020, com aumento inicial dos casos, picos intermediários e posterior estabilização.
+
+A rede privada apresenta um comportamento mais estável ao longo do tempo, com menores volumes e taxas de internação, enquanto a rede pública evidencia oscilações mais pronunciadas, refletindo seu papel central na absorção da demanda durante os momentos mais críticos da pandemia.
+
+As variações observadas podem estar relacionadas a fatores como a adoção e flexibilização de medidas de restrição, mudanças no comportamento da populacional e a reorganização dos serviços de saúde.
+
+## 6) Internações por faixa etaria, sexo e tipo de atendimento
+
+```{r}
+ggplot(internacoes_pubpriv_iddsx, aes(x = faixa_etaria, y = taxa_internacao, fill = atendimento_tipo))+
+  geom_col(position = position_dodge(width = 0.8), width = 0.5)+
+  facet_wrap(~sexo)+
+  geom_text(aes(label = paste0(round(taxa_internacao,1),"%")),
+            position = position_dodge(width = 0.8),
+            vjust = -0.9,
+            size = 2.6,
+            fontface = "bold",
+            color = "gray20")+
+  scale_fill_manual(values = minhas_cores)+
+  scale_y_continuous(expand = expansion(mult = c(0.05,0.15)))+
+  labs(title = "Taxa de internação por sexo, faixa etaria e tipo de atendimento",
+       x = "Faixa Etaria",
+       y = "Taxa de Internação (%)",
+       fill = "Tipo de Atendimento")+
+  theme_classic(base_size = 11)+
+  theme(legend.position = "bottom")
+```
+
+A análise das taxas de internação por sexo, faixa etária e tipo de atendimento evidencia que a idade é o principal fator associado ao risco de internação por COVID-19. Observa-se um aumento consistente das taxas com o avanço da idade, com crescimento mais acentuado a partir dos 50 anos e este comportamento permanece nas faixas etárias mais avançadas.
+
+Além do efeito da idade, diferenças relevantes são observadas entre os sexos. Os homens apresentam taxas de internação superiores às das mulheres em praticamente todas as faixas etárias, especialmente entre 31 e 75 anos. Esse padrão é consistente com apontamentos que indicam maior gravidade clínica da COVID-19 na população masculina, possivelmente relacionada a fatores biológicos, como diferenças na resposta inflamatória, e comportamentais, como uma maior demora em procurar atendimento a saúde até um agravamento dos sintomas.
+
+Em todas as faixas etárias, as taxas de internação são sistematicamente mais elevadas na rede pública em comparação ao setor privado. Esse resultado sugere maior gravidade dos casos atendidos pelo SUS, além de refletir maior vulnerabilidade social e maior exposição ao vírus entre a população que depende do sistema público de saúde.
+
+A criticidade é ainda mais evidente entre os idosos muito longevos. Indivíduos com 90 anos ou mais apresentam as maiores taxas de internação, chegando a quase metade dos casos na rede pública e privada. Isso destaca a extrema vulnerabilidade dessa população e evidência a pressão sobre o SUS durante a pandemia.
+
+## 7) Mapa de calor das internações público x privado:
+
+```{r}
+# Mapa de internações públicas
+mapa_publico <- ggplot(mapa_internacoes_publicas)+
+  geom_sf(aes(fill = quantidade), color = "white", size = 0.2)+
+  scale_fill_gradient(low = "white",high  = "#33A02C")+
+  labs(title = "Quantidade de internações na rede pública por estado")+
+  theme_void()
+
+
+# Mapa de internações privadas
+mapa_privado <- ggplot(mapa_internacoes_privadas)+
+  geom_sf(aes(fill = quantidade), color = "white", size = 0.2)+
+  scale_fill_gradient(low = "white",high  = "#1F78B4")+
+  labs(title = "Quantidade de internações na rede privada por estado")+
+  theme_void()
+
+
+mapas_int <- mapa_publico / mapa_privado
+mapas_int
+```
+
+O mapa referente à rede pública reflete principalmente a combinação entre tamanho populacional, elevada dependência do SUS e maior impacto da COVID-19 em determinadas regiões do país. Observa-se concentração de valores mais elevados em diversos estados das regiões Norte e Nordeste, como Amazonas, Pará, Maranhão e Ceará.
+
+Em contraste, o mapa da rede privada evidencia uma forte desigualdade regional, com concentração quase exclusiva de internações nos estados das regiões Sul e Sudeste, onde a cobertura de planos de saúde e a infraestrutura hospitalar privada é mais presente. Em grande parte do Norte e Nordeste, a participação do setor privado é reduzida ou praticamente inexistente.
+
+O contraste entre os dois mapas reforça a importância do SUS como principal provedor de assistência hospitalar, especialmente nas regiões Norte e Nordeste. São Paulo se destaca em ambos os mapas, resultado coerente com seu grande volume populacional e com a presença simultânea de ampla rede pública e privada.
+
+De forma geral, a visualização espacial evidencia que o impacto da pandemia não ocorreu de maneira homogênea no território brasileiro, destacando uma grande desigualdade regional no acesso e na utilização dos serviços de saúde.
+
+## 8) Diferenças regionais no tipo de atendimento
+
+```{r}
+ggplot(internacoes_pubpriv_regiao,
+       aes(x = taxa_internacao, y = região, fill = atendimento_tipo)) +
+  geom_col(position = position_dodge(width = 0.6)) +
+  geom_text(aes(label = paste0(round(taxa_internacao,3)*100, "%")),
+            position = position_dodge(width = 0.6),
+            nudge_x = 0.002,
+            size = 3, 
+            fontfac = "bold",
+            color = "grey0") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1),
+                     expand = expansion(mult = c(0.02,0.15))) +
+  scale_fill_manual(values = minhas_cores) +
+  labs(title = "Taxa de internação por região e tipo de atendimento",
+    x = "Taxa de internação (%)",
+    y = "Região",
+    fill = "Tipo de atendimento") +
+  theme_classic(base_size = 11)+
+  theme(legend.position = "bottom")
+```
+
+A análise regional evidencia que o Sistema Único de Saúde (SUS) foi o principal responsável pelas internações por COVID-19 na maior parte do território brasileiro, reforçando seu papel central na resposta à pandemia. Uma exceção relevante é a região Norte, onde se observa maior participação relativa do setor privado, possivelmente associada a características locais de oferta e organização dos serviços de saúde.
+
+As regiões Sul e Sudeste apresentam comportamento semelhante nas taxas de internação da rede pública, sugerindo maior uniformidade da cobertura e da capacidade do SUS nessas áreas. No entanto, essas mesmas regiões diferem de forma significativa no setor privado, indicando desigualdades na distribuição e no acesso à saúde suplementar.
+
+De modo geral, Norte e Nordeste registram taxas mais elevadas de internação, enquanto Sul e Sudeste apresentam valores menores. Esse padrão reflete desigualdades estruturais históricas, diferenças na capacidade hospitalar e no acesso a serviços de maior complexidade. Em regiões com menor oferta de cuidados especializados, a progressão clínica mais rápida antes do atendimento pode contribuir para maiores taxas de internação proporcional.
+
+Esses achados reforçam que as desigualdades regionais desempenharam papel central na forma como a pandemia impactou o sistema de saúde brasileiro.
