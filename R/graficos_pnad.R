@@ -1,5 +1,3 @@
-##### PRIMEIRO PORTFOLIO
-
 ##### PROJETO PNAD COVID: DIFERENÇA DE INTERNAÇÕES E DESFECHOS NA REDE PUBLICA E PRIVADA #####
 
 
@@ -37,7 +35,7 @@ ggplot(pnad_sociodem, aes(x = atendimento_tipo, y = idade_media, fill = atendime
        y = "Idade média",
        fill = "Tipo de atendimento")+
   theme_classic(base_size = 13)
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/media_idade.png", width = 8, heigh = 4)
+ggsave(".../Graficos/media_idade.png", width = 8, heigh = 4)
 
 
 
@@ -51,7 +49,7 @@ ggplot(pnad_sociodem,aes(x = atendimento_tipo, y = renda_media, fill = atendimen
        y = "Renda média",
        fill = "Tipo de atendimento")+
   theme_classic(base_size = 13)
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/renda_media.png", width = 8, heigh = 4)
+ggsave(".../Graficos/renda_media.png", width = 8, heigh = 4)
 
 
 #### Distibuição do sexo pelos tipos de atendimento ####
@@ -71,7 +69,7 @@ ggplot(pnad_sexo, aes(x = "", y = proporcao, fill = sexo)) +
     legend.title = element_text(size = 16),     
     plot.title = element_text(size = 16, face = "bold"),
     strip.text = element_text(size = 16, face = "bold"))
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/sexo_distribuicao.png", width = 8, heigh = 4)
+ggsave(".../Graficos/sexo_distribuicao.png", width = 8, heigh = 4)
 
 
 
@@ -88,7 +86,7 @@ ggplot(internacoes_pubpriv, aes(x = atendimento_tipo, y = taxa_internacoes, fill
        y = "Taxa (%)",
        fill = "Tipo de atendimento")+
   theme_classic(base_size = 13)
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/taxa_internacoes.png", width = 8, heigh = 4)
+ggsave(".../Graficos/taxa_internacoes.png", width = 8, heigh = 4)
 
 
 #### Taxa de Internações por mes ####
@@ -130,7 +128,7 @@ qtd_int <- ggplot(internacoes_pubpriv_mes, aes(x = mes_pesquisa, y = quantidade,
 
 # Gráfico com a taxa e a quantidade de internações por mês mesclados
 internacoes_mes_linha <- tx_int / qtd_int; internacoes_mes_linha
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/taxa_internacao_mes.png", width = 8, heigh = 4)
+ggsave(".../Graficos/taxa_internacao_mes.png", width = 8, heigh = 4)
 
 
 
@@ -152,7 +150,7 @@ ggplot(internacoes_pubpriv_iddsx, aes(x = faixa_etaria, y = taxa_internacao, fil
        fill = "Tipo de Atendimento")+
   theme_classic(base_size = 11)+
   theme(legend.position = "bottom")
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/taxa_internacao_sexo_faixaetaria.png")
+ggsave(".../Graficos/taxa_internacao_sexo_faixaetaria.png")
 
 
 
@@ -174,7 +172,7 @@ mapa_privado <- ggplot(mapa_internacoes_privadas)+
 
 
 mapas_int <- mapa_publico / mapa_privado
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/mapas_internacao.png", width = 10, heigh = 10)
+ggsave(".../Graficos/mapas_internacao.png", width = 10, heigh = 10)
 
 
 
@@ -197,6 +195,6 @@ ggplot(internacoes_pubpriv_regiao,
        fill = "Tipo de atendimento") +
   theme_classic(base_size = 11)+
   theme(legend.position = "bottom")
-ggsave("G:/Meu Drive/PNAD_COVID/Graficos/internacao_regiao.png", width = 8, heigh = 4)
+ggsave(".../Graficos/internacao_regiao.png", width = 8, heigh = 4)
 
 
