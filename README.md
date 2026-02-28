@@ -48,6 +48,20 @@ Projeto desenvolvido com foco em análise de dados na área da saúde, aplicando
 
 ---
 
+## Fonte dos Dados
+
+Os dados utilizados neste projeto são provenientes da PNAD COVID-19 2020 (IBGE).
+
+Por questões de tamanho, a base bruta não está disponível neste repositório.
+
+Download oficial:
+https://www.ibge.gov.br/estatisticas/investigacoes-experimentais/estatisticas-experimentais/27946-divulgacao-semanal-pnadcovid1.html?=&t=downloads
+# Para acessar as bases de dados: 
+- No menu "Downloads", clique em "Microdados" -> "Dados"
+# Para acessar os dicionários de dados:
+- No menu "Downloads", clique em "Microdados" -> "Documentação"
+
+---
 ## Autor
 
 Elton Santos  
