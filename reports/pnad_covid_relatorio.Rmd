@@ -69,9 +69,12 @@ minhas_cores <- cores[c(2, 4)]
 sexo_cores <- cores[c(1,5)]
 ```
 
+
+
 # Resultados visuais e analise dos achados
 
-## 1) Media de idade pelo tipo de atendimento
+
+## 1) Media de idade pelo tipo de atendimento:
 
 ```{r}
 ggplot(pnad_sociodem, aes(x = atendimento_tipo, y = idade_media, fill = atendimento_tipo))+
@@ -109,7 +112,7 @@ Este resultado reflete a desigualdade socioeconômica estrutural do Brasil, nas 
 
 Esse achado é central para a interpretação das análises subsequentes, pois indica que desigualdades de renda influencia diretamente o padrão de acesso aos serviços de saúde e os perfis de internação observados durante a pandemia de COVID-19.
 
-## 3) Distribuição do sexo pelos tipos de atendimento
+## 3) Distribuição do sexo pelos tipos de atendimento:
 
 ```{r}
 ggplot(pnad_sexo, aes(x = "", y = proporcao, fill = sexo)) +
@@ -136,7 +139,7 @@ A leve predominância feminina pode estar associada a características demográf
 
 De modo geral, a amostra apresenta uma distribuição relativamente semelhante entre os tipos de atendimento.
 
-## 4) Diferença nas internações entre as redes públicas privadas
+## 4) Diferença nas internações entre as redes públicas privadas:
 
 ```{r}
 ggplot(internacoes_pubpriv, aes(x = atendimento_tipo, y = taxa_internacoes, fill = atendimento_tipo))+
@@ -158,7 +161,7 @@ Esse resultado reflete, em grande parte, o perfil socioeconômico e clínico da 
 
 A maior taxa de internação na rede pública evidencia o impacto desproporcional da pandemia sobre populações mais vulneráveis e reforça o papel central do SUS na resposta à COVID-19, especialmente no atendimento dos casos mais graves.
 
-## 5) Taxa de Internações por mes
+## 5) Taxa de Internações por mes:
 
 ```{r}
 # Grafico com a taxa de internação:
@@ -209,7 +212,7 @@ A rede privada apresenta um comportamento mais estável ao longo do tempo, com m
 
 As variações observadas podem estar relacionadas a fatores como a adoção e flexibilização de medidas de restrição, mudanças no comportamento da populacional e a reorganização dos serviços de saúde.
 
-## 6) Internações por faixa etaria, sexo e tipo de atendimento
+## 6) Internações por faixa etaria, sexo e tipo de atendimento:
 
 ```{r}
 ggplot(internacoes_pubpriv_iddsx, aes(x = faixa_etaria, y = taxa_internacao, fill = atendimento_tipo))+
@@ -270,7 +273,7 @@ O contraste entre os dois mapas reforça a importância do SUS como principal pr
 
 De forma geral, a visualização espacial evidencia que o impacto da pandemia não ocorreu de maneira homogênea no território brasileiro, destacando uma grande desigualdade regional no acesso e na utilização dos serviços de saúde.
 
-## 8) Diferenças regionais no tipo de atendimento
+## 8) Diferenças regionais no tipo de atendimento:
 
 ```{r}
 ggplot(internacoes_pubpriv_regiao,
@@ -300,3 +303,9 @@ As regiões Sul e Sudeste apresentam comportamento semelhante nas taxas de inter
 De modo geral, Norte e Nordeste registram taxas mais elevadas de internação, enquanto Sul e Sudeste apresentam valores menores. Esse padrão reflete desigualdades estruturais históricas, diferenças na capacidade hospitalar e no acesso a serviços de maior complexidade. Em regiões com menor oferta de cuidados especializados, a progressão clínica mais rápida antes do atendimento pode contribuir para maiores taxas de internação proporcional.
 
 Esses achados reforçam que as desigualdades regionais desempenharam papel central na forma como a pandemia impactou o sistema de saúde brasileiro.
+
+
+## Gerando o relatório do RMarkdown em formato HTML:
+```{r}
+rmarkdown::render(".../pnad_covid_relatorio.Rmd")
+```
