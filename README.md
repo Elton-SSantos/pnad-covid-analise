@@ -56,9 +56,9 @@ Por questões de tamanho, a base bruta não está disponível neste repositório
 
 Download oficial:
 https://www.ibge.gov.br/estatisticas/investigacoes-experimentais/estatisticas-experimentais/27946-divulgacao-semanal-pnadcovid1.html?=&t=downloads
-### Para acessar as bases de dados: 
+## Para acessar as bases de dados: 
 - No menu "Downloads", clique em "Microdados" -> "Dados"
-### Para acessar os dicionários de dados:
+## Para acessar os dicionários de dados:
 - No menu "Downloads", clique em "Microdados" -> "Documentação"
 
 ---
