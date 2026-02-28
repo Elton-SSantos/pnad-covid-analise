@@ -30,7 +30,7 @@ O objetivo é explorar padrões socioeconômicos e desigualdades no acesso à sa
 
 - `01_tratamento.R` → Limpeza e transformação dos dados
 - `02_graficos.R` → Construção dos gráficos
-- `pnad_covid_analise.Rmd` → Relatório final com análise interpretativa
+- `pnad_covid_relatorio.Rmd` → Relatório final com análise interpretativa
 
 ---
 
