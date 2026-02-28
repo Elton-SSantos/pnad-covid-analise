@@ -3,7 +3,7 @@
 ##### PROJETO PNAD COVID: DIFERENÇA DE INTERNAÇÕES E DESFECHOS NA REDE PUBLICA E PRIVADA #####
 
 
-setwd("G:/Meu Drive/PNAD_COVID/")
+setwd(".../PNAD_COVID/")
 
 ##### SCRIPT 1: TRATAMENTO DOS DADOS  #####
 
@@ -137,7 +137,7 @@ pnad_sociodem <- base_pnad %>%
             idade_media = round(mean(idade, na.rm = T),0),
             renda_media = round(mean(renda, na.rm = T),2)) %>% 
   arrange(desc(quantidade)); pnad_sociodem
-write.csv2(pnad_sociodem,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados/SocioDemoc_PNAD.csv"), 
+write.csv2(pnad_sociodem,paste0(".../Base_Dados/SocioDemoc_PNAD.csv"), 
            row.names = F, fileEncoding = "latin1")
 
 
@@ -150,7 +150,7 @@ pnad_sexo <- pnad_sociodem %>%
   mutate(sexo = recode(sexo, 
                        homem_prop = "Homens",
                        mulher_prop = "Mulheres"))
-write.csv2(pnad_sexo,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados/Sexo_PNAD.csv"), 
+write.csv2(pnad_sexo,paste0(".../Base_Dados/Sexo_PNAD.csv"), 
            row.names = F, fileEncoding = "latin1")
 
 
@@ -160,7 +160,7 @@ internacoes_pubpriv <- base_pnad %>%
   group_by(atendimento_tipo) %>% 
   summarise(quantidade = n(),
             taxa_internacoes = round(mean(internacao == "Sim", na.rm=T) * 100,1));internacoes_pubpriv
-write.csv2(internacoes_pubpriv,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados/InternacoesPubPriv_PNAD.csv"), 
+write.csv2(internacoes_pubpriv,paste0(".../Base_Dados/InternacoesPubPriv_PNAD.csv"), 
            row.names = F, fileEncoding = "latin1")
 
 
@@ -171,7 +171,7 @@ internacoes_pubpriv_mes <- base_pnad %>%
   group_by(mes_pesquisa, atendimento_tipo) %>% 
   summarise(quantidade = n(),
             taxa_internacoes = round(mean(internacao == "Sim", na.rm=T) * 100,1)); internacoes_pubpriv_mes
-write.csv2(internacoes_pubpriv_mes,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados/InternacoesPubPriv_Mes_PNAD.csv.csv"), 
+write.csv2(internacoes_pubpriv_mes,paste0(".../Base_Dados/InternacoesPubPriv_Mes_PNAD.csv"), 
            row.names = F, fileEncoding = "latin1")
 
 
@@ -184,7 +184,7 @@ internacoes_pubpriv_iddsx <- base_pnad %>%
   summarise(quantidade = n(),
             taxa_internacao = round(mean(internacao == "Sim", na.rm=T)*100,1)) %>% 
   arrange(desc(taxa_internacao)); internacoes_pubpriv_iddsx
-write.csv2(internacoes_pubpriv_iddsx,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados/InternacoesPubPriv_FxEtSx_PNAD.csv.csv"), 
+write.csv2(internacoes_pubpriv_iddsx,paste0(".../Base_Dados/InternacoesPubPriv_FxEtSx_PNAD.csv"), 
            row.names = F, fileEncoding = "latin1")
 
 
@@ -198,7 +198,7 @@ internacoes_pubpriv_estado <- base_pnad %>%
   summarise(quantidade = n(),
             taxa_internacao = mean(internacao == "Sim", na.rm=T),
             renda_media = mean(renda, na.rm=T)); internacoes_pubpriv_estado
-write.csv2(internacoes_pubpriv_estado,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados/InternacoesPubPriv_Estado_PNAD.csv.csv"), 
+write.csv2(internacoes_pubpriv_estado,paste0(".../Base_Dados/InternacoesPubPriv_Estado_PNAD.csv"), 
            row.names = F, fileEncoding = "latin1")
 
 
@@ -225,7 +225,7 @@ internacoes_pubpriv_regiao <- base_pnad %>%
   group_by(região, atendimento_tipo) %>% 
   summarise(quantidade = n(),
             taxa_internacao = mean(internacao == "Sim", na.rm=T)); internacoes_pubpriv_regiao
-write.csv2(internacoes_pubpriv_regiao,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados/InternacoesPubPriv_Regiao_PNAD.csv.csv"), 
+write.csv2(internacoes_pubpriv_regiao,paste0(".../Base_Dados/InternacoesPubPriv_Regiao_PNAD.csv"), 
            row.names = F, fileEncoding = "latin1")
 
 
@@ -235,6 +235,6 @@ write.csv2(internacoes_pubpriv_regiao,paste0("G:/Meu Drive/PNAD_COVID/Base_Dados
 
 
 
-source("G:/Meu Drive/PNAD_COVID/Script/grafico_pnad.R")
+source(".../Script/grafico_pnad.R")
 
-#source("G:/Meu Drive/PNAD_COVID/Script/PNAD_COVID__rmarkdown.Rmd")
+
