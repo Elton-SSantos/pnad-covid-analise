@@ -234,7 +234,10 @@ write.csv2(internacoes_pubpriv_regiao,paste0(".../Base_Dados/InternacoesPubPriv_
 
 
 
-
+# Rodar o script de geração dos gráficos ----------------------------------
 source(".../Script/grafico_pnad.R")
+
+# Rodar o relatório no RMarkdown e gerando uma saída em HTML --------------
+rmarkdown::render(".../Script/pnad_covid_relatorio.Rmd")
 
 
