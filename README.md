@@ -19,6 +19,7 @@ O objetivo é explorar padrões socioeconômicos e desigualdades no acesso à sa
 
 ## Acessar o relatório das análises
 Você pode acessar o relatório das análises gerado via R, usando o RMarkdown clicando no seguinte link: https://elton-ssantos.github.io/pnad-covid-analise/
+
 ---
 
 
